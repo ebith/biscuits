@@ -5,6 +5,7 @@ import List, { ListItem, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
 import * as popsicle from 'popsicle';
+import sortBy from 'lodash.sortby';
 
 const consumerKey = process.env.REACT_APP_CONSUMER_KEY;
 const redirectUri = process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}/` : 'http://localhost:3000/';
@@ -45,11 +46,10 @@ class Biscuits extends Component {
             body: {
               consumer_key: consumerKey,
               access_token: accessToken,
-              count: 1000,
             },
           }).use(popsicle.plugins.parse('json'))
             .then((response2) => {
-              this.setState({'list': response2.body.list});
+              this.setState({'list': sortBy(response2.body.list, (item) => { return item.sort_id })});
             });
       });
     } else {
@@ -67,16 +67,16 @@ class Biscuits extends Component {
     }
   }
 
-  eat(event, item){
-    delete this.state.list[item.item_id];
+  eat(index){
+    this.state.list.splice(index, 1);
     this.setState({list: this.state.list});
   }
 
   render(props) {
-    const listItems = Array.from(Object.values(this.state.list), (item) => {
+    const listItems = Array.from(Object.values(this.state.list), (item, index) => {
       return (
         <div key={item.item_id}>
-          <ListItem button component="a" href={item.given_url} onClick={(event) => this.eat(event, item)}>
+          <ListItem button component="a" href={item.given_url} onClick={(event) => this.eat(index)}>
             <ListItemText primary={item.given_title || item.given_url} />
           </ListItem>
           <Divider />
