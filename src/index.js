@@ -29,7 +29,7 @@ class Biscuits extends Component {
     if (searchParams.has('code')) {
       popsicle.request({
         method: 'POST',
-        url: 'https://proxy.feelmy.net/pocket/oauth/authorize',
+        url: `${process.env.REACT_APP_BASE_URL}/oauth/authorize`,
         body: {
           consumer_key: consumerKey,
           code: searchParams.get('code'),
@@ -41,7 +41,7 @@ class Biscuits extends Component {
 
           popsicle.request({
             method: 'POST',
-            url: 'https://proxy.feelmy.net/pocket/get',
+            url: `${process.env.REACT_APP_BASE_URL}/get`,
             body: {
               consumer_key: consumerKey,
               access_token: accessToken,
@@ -55,7 +55,7 @@ class Biscuits extends Component {
     } else {
       popsicle.request({
         method: 'POST',
-        url: 'https://proxy.feelmy.net/pocket/oauth/request',
+        url: `${process.env.REACT_APP_BASE_URL}/oauth/request`,
         body: {
           consumer_key: consumerKey,
           redirect_uri: redirectUri,
