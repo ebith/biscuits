@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "grommet": "^1.7.0",
     "lodash.sortby": "^4.7.0",
-    "material-ui": "next",
     "object.values": "^1.0.4",
     "popsicle": "^9.1.0",
     "react": "^15.6.1",

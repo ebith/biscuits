@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import List, { ListItem, ListItemText } from 'material-ui/List';
-import Divider from 'material-ui/Divider';
+import 'grommet/grommet.min.css';
+import App from 'grommet/components/App';
+import Box from 'grommet/components/Box';
+import List from 'grommet/components/List';
+import ListItem from 'grommet/components/ListItem';
+import Spinning from 'grommet/components/icons/Spinning';
+import Label from 'grommet/components/Label';
 
 import * as popsicle from 'popsicle';
 import 'url-search-params-polyfill';
@@ -15,20 +20,13 @@ const consumerKey = process.env.REACT_APP_CONSUMER_KEY;
 const redirectUri = process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}/` : 'http://localhost:3000/';
 let accessToken;
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <Biscuits />
-      </div>
-    );
-  }
-}
-
 class Biscuits extends Component {
   constructor(props) {
     super(props);
-    this.state = {'list': {}};
+    this.state = {
+      loading: true,
+      list: {},
+    };
 
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.has('code')) {
@@ -53,7 +51,8 @@ class Biscuits extends Component {
             },
           }).use(popsicle.plugins.parse('json'))
             .then((response2) => {
-              this.setState({'list': sortBy(response2.body.list, (item) => { return item.sort_id })});
+              this.setState({list: sortBy(response2.body.list, (item) => { return item.sort_id })});
+              this.setState({loading: false});
             });
       });
     } else {
@@ -79,18 +78,31 @@ class Biscuits extends Component {
   render(props) {
     const listItems = Array.from(Object.values(this.state.list), (item, index) => {
       return (
-        <div key={item.item_id}>
-          <ListItem button component="a" href={item.given_url} onClick={(event) => this.eat(index)}>
-            <ListItemText primary={item.given_title || item.given_url} />
-          </ListItem>
-          <Divider />
-        </div>
+        <ListItem onClick={(event) => this.eat(index)} key={item.item_id}>
+          <a href={item.given_url}>{item.given_title || item.given_url}</a>
+        </ListItem>
       );
     });
-    return (
-      <List>{listItems}</List>
-    );
+
+    if (this.state.loading) {
+      return (
+        <Label align="center">
+          <Spinning size="xlarge"/>
+          <div>Loading...</div>
+        </Label>
+      );
+    } else {
+      return (
+        <List>{listItems}</List>
+      );
+    }
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <App>
+    <Box full={true}>
+      <Biscuits />
+    </Box>
+  </App>
+  , document.getElementById('root'));
