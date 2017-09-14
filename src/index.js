@@ -5,7 +5,11 @@ import List, { ListItem, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
 import * as popsicle from 'popsicle';
+import 'url-search-params-polyfill';
+import values from 'object.values';
 import sortBy from 'lodash.sortby';
+
+if (!Object.values) { values.shim(); }
 
 const consumerKey = process.env.REACT_APP_CONSUMER_KEY;
 const redirectUri = process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}/` : 'http://localhost:3000/';
