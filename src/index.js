@@ -70,15 +70,27 @@ class Biscuits extends Component {
     }
   }
 
-  eat(index){
-    this.state.list.splice(index, 1);
-    this.setState({list: this.state.list});
+  eat(index, id){
+    popsicle.request({
+      method: 'POST',
+      url: `${process.env.REACT_APP_BASE_URL}/send`,
+      body: {
+        consumer_key: consumerKey,
+        access_token: accessToken,
+        actions: [{action: 'archive', item_id: id}]
+      },
+    }).use(popsicle.plugins.parse('json'))
+      .then((response) => {
+        console.log(response.body);
+        this.state.list.splice(index, 1);
+        this.setState({list: this.state.list});
+      });
   }
 
   render(props) {
     const listItems = Array.from(Object.values(this.state.list), (item, index) => {
       return (
-        <ListItem onClick={(event) => this.eat(index)} key={item.item_id}>
+        <ListItem onClick={(event) => this.eat(index, item.item_id)} key={item.item_id}>
           <a href={item.given_url}>{item.given_title || item.given_url}</a>
         </ListItem>
       );
