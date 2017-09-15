@@ -24,7 +24,6 @@ class Biscuits extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
       list: {},
     };
 
@@ -52,7 +51,6 @@ class Biscuits extends Component {
           }).use(popsicle.plugins.parse('json'))
             .then((response2) => {
               this.setState({list: sortBy(response2.body.list, (item) => { return item.sort_id })});
-              this.setState({loading: false});
             });
       });
     } else {
@@ -81,7 +79,6 @@ class Biscuits extends Component {
       },
     }).use(popsicle.plugins.parse('json'))
       .then((response) => {
-        console.log(response.body);
         this.state.list.splice(index, 1);
         this.setState({list: this.state.list});
       });
@@ -96,7 +93,7 @@ class Biscuits extends Component {
       );
     });
 
-    if (this.state.loading) {
+    if (Object.keys(this.state.list).length === 0) {
       return (
         <Label align="center">
           <Spinning size="xlarge"/>
