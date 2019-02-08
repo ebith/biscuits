@@ -83,5 +83,5 @@ axios.defaults.headers.post['X-Accept'] = 'application/json';
     }
   }
 
-  render(<App />, document.querySelector('#app'));
+  render(<App />, document.body, document.querySelector('#app'));
 })();
