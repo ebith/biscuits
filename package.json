@@ -13,6 +13,7 @@
     "http-proxy-middleware": "^0.19.1",
     "parcel-bundler": "^1.11.0",
     "parcel-plugin-purgecss": "^2.1.0",
+    "parcel-plugin-static-files-copy": "^2.0.0",
     "preact": "^8.4.2",
     "sass": "^1.17.0"
   },
