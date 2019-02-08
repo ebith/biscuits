@@ -1,117 +1,87 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+/* eslint-disable camelcase */
+import './index.sass'; // eslint-disable-line import/no-unassigned-import
+import {h, render, Component} from 'preact'; // eslint-disable-line no-unused-vars
+import axios from 'axios';
 
-import 'grommet/grommet.min.css';
-import App from 'grommet/components/App';
-import Box from 'grommet/components/Box';
-import List from 'grommet/components/List';
-import ListItem from 'grommet/components/ListItem';
-import Spinning from 'grommet/components/icons/Spinning';
-import Label from 'grommet/components/Label';
+const consumer_key = process.env.CONSUMER_KEY;
+const redirect_uri = window.location.origin;
 
-import * as popsicle from 'popsicle';
-import 'url-search-params-polyfill';
-import values from 'object.values';
-import sortBy from 'lodash.sortby';
+axios.defaults.headers.post['X-Accept'] = 'application/json';
 
-if (!Object.values) { values.shim(); }
+(async () => {
+  if (!localStorage.getItem('access_token')) {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has('code')) {
+      const response = await axios.post('/pocket/oauth/request', {consumer_key, redirect_uri});
+      window.location.href = `https://getpocket.com/auth/authorize?request_token=${
+        response.data.code
+      }&redirect_uri=${redirect_uri}?code=${response.data.code}`;
+    }
 
-const consumerKey = process.env.REACT_APP_CONSUMER_KEY;
-const redirectUri = process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}/` : 'http://localhost:3000/';
-let accessToken;
+    const response = await axios.post('/pocket/oauth/authorize', {consumer_key, code: params.get('code')});
+    localStorage.setItem('access_token', response.data.access_token);
+    window.history.replaceState('', '', window.location.pathname);
+  }
 
-class Biscuits extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      list: {},
-    };
+  const access_token = localStorage.getItem('access_token');
 
-    const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.has('code')) {
-      popsicle.request({
-        method: 'POST',
-        url: `${process.env.REACT_APP_BASE_URL}/oauth/authorize`,
-        body: {
-          consumer_key: consumerKey,
-          code: searchParams.get('code'),
-        },
-      }).use(popsicle.plugins.parse('urlencoded'))
-        .then((response) => {
-          accessToken = response.body.access_token;
-          window.history.replaceState('', '', window.location.pathname);
+  class App extends Component {
+    constructor() {
+      super();
+      this.state = {
+        items: []
+      };
+    }
 
-          popsicle.request({
-            method: 'POST',
-            url: `${process.env.REACT_APP_BASE_URL}/get`,
-            body: {
-              consumer_key: consumerKey,
-              access_token: accessToken,
-            },
-          }).use(popsicle.plugins.parse('json'))
-            .then((response2) => {
-              this.setState({list: sortBy(response2.body.list, (item) => { return item.sort_id })});
-            });
+    async componentDidMount() {
+      const response = await axios.post('/pocket/get', {consumer_key, access_token});
+      const items = Object.values(response.data.list).sort((a, b) => {
+        return a.sort_id - b.sort_id;
       });
-    } else {
-      popsicle.request({
-        method: 'POST',
-        url: `${process.env.REACT_APP_BASE_URL}/oauth/request`,
-        body: {
-          consumer_key: consumerKey,
-          redirect_uri: redirectUri,
-        },
-      }).use(popsicle.plugins.parse('urlencoded'))
-        .then((response) => {
-          window.location.href = `https://getpocket.com/auth/authorize?request_token=${response.body.code}&redirect_uri=${redirectUri}?code=${response.body.code}`;
+      this.setState({items});
+    }
+
+    async handleClick(index, item_id) {
+      await axios.post('/pocket/send', {consumer_key, access_token, actions: [{action: 'archive', item_id}]});
+      this.setState({
+        items: this.state.items.filter((_, i) => {
+          return i !== index;
+        })
       });
+    }
+
+    render() {
+      const Loading = () => {
+        return (
+          <div class="modal is-active">
+            <div class="modal-background" />
+            <div class="modal-content">
+              <a class="button is-loading is-centered" />
+            </div>
+          </div>
+        );
+      };
+
+      const list = this.state.items.map((item, index) => {
+        return (
+          <a
+            className="panel-block"
+            href={item.given_url}
+            onClick={() => this.handleClick(index, item.item_id)}
+            key={item.item_id}
+          >
+            {item.given_title || item.given_url}
+          </a>
+        );
+      });
+
+      return (
+        <div className="container">
+          {this.state.items.length === 0 ? <Loading /> : <div className="panel">{list}</div>}
+        </div>
+      );
     }
   }
 
-  eat(index, id){
-    popsicle.request({
-      method: 'POST',
-      url: `${process.env.REACT_APP_BASE_URL}/send`,
-      body: {
-        consumer_key: consumerKey,
-        access_token: accessToken,
-        actions: [{action: 'archive', item_id: id}]
-      },
-    }).use(popsicle.plugins.parse('json'))
-      .then((response) => {
-        this.state.list.splice(index, 1);
-        this.setState({list: this.state.list});
-      });
-  }
-
-  render(props) {
-    const listItems = Array.from(Object.values(this.state.list), (item, index) => {
-      return (
-        <ListItem onClick={(event) => this.eat(index, item.item_id)} key={item.item_id}>
-          <a href={item.given_url}>{item.given_title || item.given_url}</a>
-        </ListItem>
-      );
-    });
-
-    if (Object.keys(this.state.list).length === 0) {
-      return (
-        <Label align="center">
-          <Spinning size="xlarge"/>
-          <div>Loading...</div>
-        </Label>
-      );
-    } else {
-      return (
-        <List>{listItems}</List>
-      );
-    }
-  }
-}
-
-ReactDOM.render(
-  <App>
-    <Box full={true}>
-      <Biscuits />
-    </Box>
-  </App>
-  , document.getElementById('root'));
+  render(<App />, document.querySelector('#app'));
+})();

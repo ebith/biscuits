@@ -1,0 +1,38 @@
+@import "~bulma/bulma"
+
+.panel-block:first-of-type
+  border-top-left-radius: 4px
+  border-top-right-radius: 4px
+
+.panel-block:last-of-type
+  border-bottom-left-radius: 4px
+  border-bottom-right-radius: 4px
+
+.is-loading
+  border: none
+  background-color: hsl(0, 0%, 96%)
+
+.is-loading:after
+  height: 5rem !important
+  width: 5rem !important
+
+.modal-background
+  background-color: hsl(0, 0%, 96%)
+
+.modal-content
+  background-color: hsl(0, 0%, 96%)
+  height: 6rem
+  width: 6rem
+
+// has-text-link
+a
+  color: #3273dc !important
+
+a:hover, a:focus
+  color: #205bbc !important
+
+// iOS :hover fix
+@media screen and (max-width: 680px)
+  a:hover
+    background-color: #fff !important
+    color: #3273dc !important

@@ -1,36 +1,46 @@
 {
-  "name": "biscuits",
+  "name": "Biscuits",
   "version": "0.1.0",
+  "main": "index.js",
+  "repository": "https://github.com/ebith/Biscuits",
+  "author": "ebith <ebith.h@gmail.com>",
+  "license": "MIT",
   "private": true,
-  "dependencies": {
-    "grommet": "^1.7.0",
-    "lodash.sortby": "^4.7.0",
-    "object.values": "^1.0.4",
-    "popsicle": "^9.1.0",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "url-search-params-polyfill": "^2.0.1"
-  },
-  "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
-  },
-  "homepage": "https://ebith.github.io/biscuits",
   "devDependencies": {
-    "gh-pages": "^1.0.0",
-    "react-scripts": "1.0.13"
+    "axios": "^0.18.0",
+    "bulma": "^0.7.2",
+    "express": "^4.16.4",
+    "http-proxy-middleware": "^0.19.1",
+    "parcel-bundler": "^1.11.0",
+    "parcel-plugin-purgecss": "^2.1.0",
+    "preact": "^8.4.2",
+    "sass": "^1.17.0"
   },
-  "proxy": {
-    "/cors": {
-      "target": "https://getpocket.com/v3",
-      "changeOrigin": true,
-      "pathRewrite": {
-        "^/cors": ""
-      }
-    }
+  "xo": {
+    "space": true,
+    "prettier": true,
+    "plugins": [
+      "react"
+    ],
+    "rules": {
+      "capitalized-comments": 0,
+      "react/jsx-uses-react": 1,
+      "react/jsx-uses-vars": 1
+    },
+    "env": [
+      "browser"
+    ]
+  },
+  "prettier": {
+    "printWidth": 120
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "iOS 12"
+  ],
+  "scripts": {
+    "build": "NODE_ENV=production parcel build src/index.html --no-source-maps --no-cache --experimental-scope-hoisting",
+    "dev": "node dev.js"
   }
 }
