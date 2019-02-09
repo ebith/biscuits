@@ -2,7 +2,7 @@ const Bundler = require('parcel-bundler');
 const express = require('express');
 const proxy = require('http-proxy-middleware');
 
-const bundler = new Bundler('./src/index.html');
+const bundler = new Bundler('./src/index.html', {cache: false});
 const app = express();
 
 app.use(

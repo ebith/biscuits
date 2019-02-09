@@ -41,7 +41,6 @@
     "iOS 12"
   ],
   "scripts": {
-    "build": "NODE_ENV=production parcel build src/index.html --no-source-maps --no-cache --experimental-scope-hoisting",
-    "dev": "node dev.js"
+    "build": "NODE_ENV=production parcel build src/index.html --no-source-maps --no-cache --experimental-scope-hoisting"
   }
 }
