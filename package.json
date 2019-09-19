@@ -12,6 +12,7 @@
     "express": "^4.16.4",
     "http-proxy-middleware": "^0.19.1",
     "parcel-bundler": "^1.11.0",
+    "parcel-plugin-inliner": "^1.0.10",
     "parcel-plugin-purgecss": "^2.1.0",
     "parcel-plugin-static-files-copy": "^2.0.0",
     "preact": "^8.4.2",
@@ -41,6 +42,7 @@
     "iOS 12"
   ],
   "scripts": {
-    "build": "NODE_ENV=production parcel build src/index.html --no-source-maps --no-cache --experimental-scope-hoisting"
+    "prebuild": "rm -rf dist/*",
+    "build": "parcel build src/index.html --no-source-maps --no-cache --experimental-scope-hoisting --public-url ."
   }
 }
