@@ -34,7 +34,9 @@ axios.defaults.headers.post['X-Accept'] = 'application/json';
     }
 
     async componentDidMount() {
-      const response = await axios.post('/pocket/get', {consumer_key, access_token});
+      const response = await axios.post('/pocket/get', {consumer_key, access_token}).catch(response => {
+        console.log(response);
+      });
       const items = Object.values(response.data.list).sort((a, b) => {
         return a.sort_id - b.sort_id;
       });
