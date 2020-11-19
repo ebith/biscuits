@@ -1,3 +1,13 @@
 [build]
   command = "yarn run build"
   publish = "dist"
+  [build.environment]
+    NODE_VERSION = "14"
+
+[[redirects]]
+  from = "/pocket/*"
+  to = "https://getpocket.com/v3/:splat"
+  status = 200
+[[redirects]]
+  from = "https://pensive-wescoff-20a65f.netlify.com/*"
+  to = "https://biscuits.feelmy.net/:splat"
