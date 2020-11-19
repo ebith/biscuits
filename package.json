@@ -39,7 +39,7 @@
   "browserslist": [
     "last 2 Chrome versions",
     "last 2 Firefox versions",
-    "iOS 12"
+    "last 2 iOS major versions"
   ],
   "scripts": {
     "prebuild": "rm -rf dist/*",
