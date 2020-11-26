@@ -18,24 +18,6 @@
     "preact": "^10.5.5",
     "sass": "^1.17.0"
   },
-  "xo": {
-    "space": true,
-    "prettier": true,
-    "plugins": [
-      "react"
-    ],
-    "rules": {
-      "capitalized-comments": 0,
-      "react/jsx-uses-react": 1,
-      "react/jsx-uses-vars": 1
-    },
-    "env": [
-      "browser"
-    ]
-  },
-  "prettier": {
-    "printWidth": 120
-  },
   "browserslist": [
     "last 2 Chrome versions",
     "last 2 Firefox versions",
