@@ -9,5 +9,5 @@
   to = "https://getpocket.com/v3/:splat"
   status = 200
 [[redirects]]
-  from = "https://pensive-wescoff-20a65f.netlify.com/*"
+  from = "https://pensive-wescoff-20a65f.netlify.app/*"
   to = "https://biscuits.feelmy.net/:splat"
