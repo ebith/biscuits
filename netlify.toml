@@ -4,6 +4,11 @@
   [build.environment]
     NODE_VERSION = "14"
 
+[[headers]]
+  for = "/*"
+  [headers.values]
+  Cache-Control = "public, max-age=31536000, immutable"
+
 [[redirects]]
   from = "/pocket/*"
   to = "https://getpocket.com/v3/:splat"
