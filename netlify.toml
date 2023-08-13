@@ -1,8 +1,8 @@
 [build]
-  command = "yarn run build"
+  command = "yarn vite build"
   publish = "dist"
   [build.environment]
-    NODE_VERSION = "14"
+    NODE_VERSION = "18"
 
 [[headers]]
   for = "/*"

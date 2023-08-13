@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
-import './index.sass'; // eslint-disable-line import/no-unassigned-import
-import {h, render, Component} from 'preact'; // eslint-disable-line no-unused-vars
 import axios from 'axios';
+import { Component, render } from 'preact';
+import './index.sass';
 
-const consumer_key = process.env.CONSUMER_KEY;
+const consumer_key = import.meta.env.VITE_CONSUMER_KEY;
 const redirect_uri = window.location.origin;
 
 axios.defaults.headers.post['X-Accept'] = 'application/json';
@@ -12,13 +12,11 @@ axios.defaults.headers.post['X-Accept'] = 'application/json';
   if (!localStorage.getItem('access_token')) {
     const params = new URLSearchParams(window.location.search);
     if (!params.has('code')) {
-      const response = await axios.post('/pocket/oauth/request', {consumer_key, redirect_uri});
-      window.location.href = `https://getpocket.com/auth/authorize?request_token=${
-        response.data.code
-      }&redirect_uri=${redirect_uri}?code=${response.data.code}`;
+      const response = await axios.post('/pocket/oauth/request', { consumer_key, redirect_uri });
+      window.location.href = `https://getpocket.com/auth/authorize?request_token=${response.data.code}&redirect_uri=${redirect_uri}?code=${response.data.code}`;
     }
 
-    const response = await axios.post('/pocket/oauth/authorize', {consumer_key, code: params.get('code')});
+    const response = await axios.post('/pocket/oauth/authorize', { consumer_key, code: params.get('code') });
     localStorage.setItem('access_token', response.data.access_token);
     window.history.replaceState('', '', window.location.pathname);
   }
@@ -29,24 +27,24 @@ axios.defaults.headers.post['X-Accept'] = 'application/json';
     constructor() {
       super();
       this.state = {
-        items: []
+        items: [],
       };
     }
 
     async componentDidMount() {
-      const response = await axios.post('/pocket/get', {consumer_key, access_token});
+      const response = await axios.post('/pocket/get', { consumer_key, access_token });
       const items = Object.values(response.data.list).sort((a, b) => {
         return a.sort_id - b.sort_id;
       });
-      this.setState({items});
+      this.setState({ items });
     }
 
     async handleClick(index, item_id) {
-      await axios.post('/pocket/send', {consumer_key, access_token, actions: [{action: 'archive', item_id}]});
+      await axios.post('/pocket/send', { consumer_key, access_token, actions: [{ action: 'archive', item_id }] });
       this.setState({
         items: this.state.items.filter((_, i) => {
           return i !== index;
-        })
+        }),
       });
     }
 

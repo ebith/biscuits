@@ -1,5 +1,5 @@
 {
-  "name": "Biscuits",
+  "name": "biscuits",
   "version": "0.1.0",
   "main": "index.js",
   "repository": "https://github.com/ebith/Biscuits",
@@ -7,26 +7,19 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "axios": "^0.21.1",
-    "bulma": "^0.9.1",
-    "express": "^4.16.4",
-    "http-proxy-middleware": "^1.0.6",
-    "parcel-bundler": "^1.11.0",
-    "parcel-plugin-purgecss": "^3.0.0",
-    "parcel-plugin-static-files-copy": "^2.0.0",
-    "preact": "^10.5.5",
-    "sass": "^1.17.0"
+    "@fullhuman/postcss-purgecss": "^5.0.0",
+    "@preact/preset-vite": "^2.5.0",
+    "postcss": "^8.4.28",
+    "sass": "^1.65.1",
+    "vite": "^4.4.9"
   },
-  "browserslist": [
-    "last 2 Chrome versions",
-    "last 2 Firefox versions",
-    "last 2 iOS major versions"
-  ],
+  "dependencies": {
+    "axios": "^1.4.0",
+    "bulma": "^0.9.4",
+    "preact": "^10.17.0"
+  },
   "scripts": {
-    "prebuild": "rm -rf dist/*",
-    "build": "parcel build src/index.html --no-source-maps --no-cache --experimental-scope-hoisting --public-url ."
-  },
-  "resolutions": {
-    "node-forge": "0.10.0"
+    "build": "vite build",
+    "dev": "vite --host"
   }
 }
