@@ -6,7 +6,7 @@ import './index.sass';
 const consumer_key = import.meta.env.VITE_CONSUMER_KEY;
 const redirect_uri = window.location.origin;
 
-axios.defaults.headers.post['X-Accept'] = 'application/json';
+axios.defaults = { headers: { 'X-Accept': 'application/json' } };
 
 (async () => {
   if (!localStorage.getItem('access_token')) {
