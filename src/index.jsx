@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
-import axios from 'axios';
 import { Component, render } from 'preact';
+import axios from 'redaxios';
 import './index.sass';
 
 const consumer_key = import.meta.env.VITE_CONSUMER_KEY;

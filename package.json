@@ -2,7 +2,7 @@
   "name": "biscuits",
   "version": "0.1.0",
   "main": "index.js",
-  "repository": "https://github.com/ebith/Biscuits",
+  "repository": "https://github.com/ebith/biscuits",
   "author": "ebith <ebith.h@gmail.com>",
   "license": "MIT",
   "private": true,
@@ -14,9 +14,9 @@
     "vite": "^4.4.9"
   },
   "dependencies": {
-    "axios": "^1.5.0",
     "bulma": "^0.9.4",
-    "preact": "^10.17.1"
+    "preact": "^10.17.1",
+    "redaxios": "^0.5.1"
   },
   "scripts": {
     "build": "vite build",
