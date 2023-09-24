@@ -1,0 +1,17 @@
+{
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm run build",
+  "outputDirectory": "dist",
+  "rewrites": [{ "source": "/pocket/:match*", "destination": "https://getpocket.com/v3/:match*" }],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}

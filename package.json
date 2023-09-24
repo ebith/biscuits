@@ -23,5 +23,6 @@
     "build": "vite build",
     "dev": "vite --host",
     "lint": "eslint src/**/*.jsx"
-  }
+  },
+  "packageManager": "pnpm@8.6.0"
 }
