@@ -1,7 +1,6 @@
 {
   "name": "biscuits",
   "version": "0.1.0",
-  "main": "index.js",
   "repository": "https://github.com/ebith/biscuits",
   "author": "ebith <ebith.h@gmail.com>",
   "license": "MIT",
@@ -9,7 +8,9 @@
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^5.0.0",
     "@preact/preset-vite": "^2.5.0",
+    "eslint": "^8.50.0",
     "postcss": "^8.4.28",
+    "prettier": "^3.0.3",
     "sass": "^1.65.1",
     "vite": "^4.4.9"
   },
@@ -20,6 +21,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "dev": "vite --host"
+    "dev": "vite --host",
+    "lint": "eslint src/**/*.jsx"
   }
 }
