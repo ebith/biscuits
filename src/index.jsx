@@ -1,21 +1,23 @@
+import ky from 'ky'
 import { Component, render } from 'preact'
-import axios from 'redaxios'
 import './index.sass'
 
 const consumer_key = import.meta.env.VITE_CONSUMER_KEY
 const redirect_uri = window.location.origin
 
-axios.defaults = { headers: { 'X-Accept': 'application/json' } }
+const api = ky.create({
+  headers: { 'X-Accept': 'application/json', Accept: '*/*' },
+})
 ;(async () => {
   if (!localStorage.getItem('access_token')) {
     const params = new URLSearchParams(window.location.search)
     if (!params.has('code')) {
-      const response = await axios.post('/pocket/oauth/request', { consumer_key, redirect_uri })
-      window.location.href = `https://getpocket.com/auth/authorize?request_token=${response.data.code}&redirect_uri=${redirect_uri}?code=${response.data.code}`
+      const json = await api.post('/pocket/oauth/request', { json: { consumer_key, redirect_uri } }).json()
+      window.location.href = `https://getpocket.com/auth/authorize?request_token=${json.code}&redirect_uri=${redirect_uri}?code=${json.code}`
     }
 
-    const response = await axios.post('/pocket/oauth/authorize', { consumer_key, code: params.get('code') })
-    localStorage.setItem('access_token', response.data.access_token)
+    const json = await api.post('/pocket/oauth/authorize', { json: { consumer_key, code: params.get('code') } }).json()
+    localStorage.setItem('access_token', json.access_token)
     window.history.replaceState('', '', window.location.pathname)
   }
 
@@ -31,15 +33,17 @@ axios.defaults = { headers: { 'X-Accept': 'application/json' } }
     }
 
     async componentDidMount() {
-      const response = await axios.post('/pocket/get', { consumer_key, access_token })
-      const items = Object.values(response.data.list).sort((a, b) => {
+      const json = await api.post('/pocket/get', { json: { consumer_key, access_token } }).json()
+      const items = Object.values(json.list).sort((a, b) => {
         return a.sort_id - b.sort_id
       })
       this.setState({ items })
     }
 
     async handleClick(index, item_id) {
-      await axios.post('/pocket/send', { consumer_key, access_token, actions: [{ action: 'archive', item_id }] })
+      await api
+        .post('/pocket/send', { json: { consumer_key, access_token, actions: [{ action: 'archive', item_id }] } })
+        .json()
       this.setState({
         items: this.state.items.filter((_, i) => {
           return i !== index
