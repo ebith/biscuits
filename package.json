@@ -18,7 +18,7 @@
   "dependencies": {
     "bulma": "^0.9.4",
     "preact": "^10.20.1",
-    "ky": "^1.2.2"
+    "ky": "^1.2.3"
   },
   "scripts": {
     "build": "vite build",
