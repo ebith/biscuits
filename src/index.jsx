@@ -33,7 +33,9 @@ const api = ky.create({
     }
 
     async componentDidMount() {
-      const json = await api.post('/pocket/get', { json: { consumer_key, access_token } }).json()
+      const json = await api
+        .post('/pocket/get', { json: { consumer_key, access_token, state: 'unread', count: 200 } })
+        .json()
       const items = Object.values(json.list).sort((a, b) => {
         return a.sort_id - b.sort_id
       })
