@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "bulma": "~0.9.4",
-    "preact": "^10.25.3",
+    "preact": "^10.25.4",
     "ky": "^1.7.4"
   },
   "scripts": {
